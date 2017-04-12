@@ -1,7 +1,7 @@
 -module(pollution2).
 -author("Kornelia Rohulko").
 
--export([createMonitor/0, addStation/3, addValue/5, removeValue/4, getOneValue/4, getStationMean/3, getMinimumDistanceStations/1]).
+-export([createMonitor/0, addStation/3, addValue/5, removeValue/4, getOneValue/4, getStationMean/3, getMinimumDistanceStations/1, getMinimumDistance/1]).
 
 -record(station, {name, coordinates , measurements=[]}).
 -record(measurement,{localTime, valueType, value}).
@@ -94,4 +94,12 @@ getMinimumDistanceStations(M) ->
 	ListX=[erlang:abs(X-Y) || {X,_} <- NewList, {Y,_} <- NewList],
 	ListY=[erlang:abs(X-Y) || {_,X} <- NewList, {_,Y} <- NewList],
     [H|T]=lists:reverse(lists:sort([math:sqrt(X*X+Y*Y) || X <- ListX, Y<-ListY])),
+	H.
+
+getMinimumDistance([]) -> 0;
+getMinimumDistance(M) ->
+	NewList= [{A,{X,Y}} || {_,A,{X,Y},_} <- M],
+	ListX=[{{B,C},erlang:abs(X-Y)} || {B,{X,_}} <- NewList, {C,{Y,_}} <- NewList],	
+	ListY=[{{B,C},erlang:abs(X-Y)} || {B,{_,X}} <- NewList, {C,{_,Y}} <- NewList],	
+    [H|T]=lists:reverse(lists:keysort(2,[{{B,C},math:sqrt(X*X+Y*Y)} || {{B,C},X} <- ListX, {_,Y} <-ListY])),
 	H.
