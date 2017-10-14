@@ -1,5 +1,5 @@
 %%%-------------------------------------------------------------------
-%%% @author Kornelcia
+%%% @author Kornelia
 %%% @copyright (C) 2017, <COMPANY>
 %%% @doc
 %%%
